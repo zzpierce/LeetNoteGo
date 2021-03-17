@@ -3,18 +3,19 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println(MedianSort([]int{4, 4, 1, 11, 1, 1, 1, 1, 1, 1}))
+	n := []int{4, 4, 1, 11, 1, 1, 1, 1, 1, 1}
+	MedianSort(n)
+	fmt.Println(n)
 }
 
-// 中位数O(n)
-func MedianSort(n []int) ([]int, int) {
-	t := find(n, 0, len(n)-1)
-	return n, t
+// 找到排序后指定位置的数字
+func MedianSort(n []int) {
+	aim(n, 0, len(n)-1, (len(n)-1)/2)
 }
 
-func find(n []int, x, y int) int {
+func aim(n []int, x, y, d int) {
 	if x == y {
-		return x
+		return
 	}
 	swap(n, x, (x+y)/2)
 	t := x
@@ -29,7 +30,6 @@ func find(n []int, x, y int) int {
 			n[t] = n[e]
 			n[e] = c
 			t = e
-			e--
 		}
 		for n[s] <= n[t] && s < e {
 			s++
@@ -39,15 +39,14 @@ func find(n []int, x, y int) int {
 			n[t] = n[s]
 			n[s] = c
 			t = s
-			s++
 		}
 	}
-	if t > (len(n)-1)/2 {
-		t = find(n, x, t-1)
-	} else if t < (len(n)-1)/2 {
-		t = find(n, t+1, y)
+	if t > d {
+		aim(n, x, t-1, d)
+	} else if t < d {
+		aim(n, t+1, y, d)
 	}
-	return t
+
 }
 
 func swap(n []int, x, y int) {
